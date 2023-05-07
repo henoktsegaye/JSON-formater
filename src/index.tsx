@@ -169,7 +169,7 @@ export const Page = () => {
                 </Text>
               )}
             </TabPanel>
-            <TabPanel>Hmm ... what do you think we should put here</TabPanel>
+            <TabPanel>hmm ... what do you think we should put here</TabPanel>
           </TabPanels>
         </Tabs>
       </Box>

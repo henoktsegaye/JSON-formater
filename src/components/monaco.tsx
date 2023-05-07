@@ -6,8 +6,19 @@ type Props = EditorProps;
 
 export type Editor = editor.IStandaloneCodeEditor;
 
+const defaultOptions = {
+  bracketPairColorization: {
+    enabled: true,
+  },
+  matchBrackets: "always" as const,
+  scrollBeyondLastLine: false,
+  minimap: {
+    enabled: false,
+  },
+};
+
 export const Monaco = forwardRef<editor.IStandaloneCodeEditor, Props>(
-  ({ value, ...rest }, ref) => {
+  ({ value, onMount, options, ...rest }, ref) => {
     return (
       <Editor
         height="70vh"
@@ -19,19 +30,13 @@ export const Monaco = forwardRef<editor.IStandaloneCodeEditor, Props>(
           if (!(typeof ref === "function") && ref) {
             ref.current = editor;
           }
-          rest.onMount && rest.onMount(editor, monaco);
-        }}
-        options={{
-          bracketPairColorization: {
-            enabled: true,
-          },
-          matchBrackets: "always",
-          scrollBeyondLastLine: false,
-          minimap: {
-            enabled: false,
-          },
+          onMount && onMount(editor, monaco);
         }}
         {...rest}
+        options={{
+          ...defaultOptions,
+          ...options,
+        }}
       />
     );
   }
