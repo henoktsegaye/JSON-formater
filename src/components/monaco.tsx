@@ -15,7 +15,7 @@ const defaultOptions = {
   minimap: {
     enabled: false,
   },
-};
+} as EditorProps["options"];
 
 export const Monaco = forwardRef<editor.IStandaloneCodeEditor, Props>(
   ({ value, onMount, options, ...rest }, ref) => {
