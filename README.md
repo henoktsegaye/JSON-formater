@@ -1,5 +1,5 @@
 # JSON Formatter
-![Logo](./src/assets/logo.svg)
+![Logo](./public/logo.svg)
 
 This is a simple web tool for formatting JSON data. It takes in JSON data as input and outputs it in a more readable and organized format. This can be helpful when working with large JSON files or when trying to debug JSON data.
 
