@@ -18,6 +18,7 @@
     "fp-ts": "^2.14.0",
     "framer-motion": "^10.12.8",
     "i": "^0.3.7",
+    "json-to-ts": "^1.7.0",
     "npm": "^9.6.6",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
@@ -35,6 +36,7 @@
     "eslint-plugin-react-refresh": "^0.3.4",
     "monaco-editor": "^0.38.0",
     "typescript": "^5.0.2",
-    "vite": "^4.3.2"
+    "vite": "^4.3.2",
+    "vite-plugin-svgr": "^3.2.0"
   }
 }

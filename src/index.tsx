@@ -1,5 +1,4 @@
 import {
-  Grid,
   GridItem,
   Box,
   Text,
@@ -12,11 +11,16 @@ import {
   TabIndicator,
   Badge,
   Select,
+  SimpleGrid,
+  useToast,
+  Divider,
 } from "@chakra-ui/react";
 import { Editor, Monaco } from "./components/monaco";
 import { useEffect, useRef, useState } from "react";
 import { formatJSONWithPrettier } from "./formatter";
 import * as E from "fp-ts/Either";
+import { ReactComponent as CopyIcon } from "./assets/icons/copyIcon.svg";
+import JSONtoTS from "json-to-ts";
 
 export const Page = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -26,6 +30,7 @@ export const Page = () => {
   const [formattedCode, setFormattedCode] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const toast = useToast();
   useEffect(() => {
     ref.current?.addEventListener("paste", (e) => {
       const clipboardText = e.clipboardData;
@@ -34,7 +39,6 @@ export const Page = () => {
       setFormattedCodeOrError(pastedText);
     });
   }, []);
-
   const setFormattedCodeOrError = (code?: string) => {
     if (!code) {
       return;
@@ -55,7 +59,7 @@ export const Page = () => {
 
   return (
     <Box>
-      <Grid p={4} gap={4} templateColumns="repeat(2, 1fr)">
+      <SimpleGrid p={2} columns={2} spacing={10}>
         <GridItem>
           <Box width={"full"} pl={4}>
             <Box
@@ -64,7 +68,9 @@ export const Page = () => {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              <Text fontSize={"xl"}>JSON to be FORMATTED</Text>
+              <Box display={"flex"} alignItems="center" flexDirection={"row"}>
+                <img src="./public/logo.svg" alt="logo" width={50} />
+              </Box>
               <Box flexDirection={"row"} display={"flex"}>
                 <Select width={"140px"}>
                   <option value="option1" selected>
@@ -73,6 +79,9 @@ export const Page = () => {
                 </Select>
 
                 <Button
+                  size={"sm"}
+                  borderRadius={2}
+                  colorScheme={"blue"}
                   ml={6}
                   variant={"solid"}
                   onClick={() => {
@@ -100,7 +109,38 @@ export const Page = () => {
               <Text fontSize={"xl"}>Formatted JSON</Text>
               <Box display="flex">
                 <Button
-                  borderRadius={0}
+                  variant="outline"
+                  ml={1}
+                  borderRadius={2}
+                  leftIcon={<CopyIcon width={18} height={18} />}
+                  isDisabled={!formattedCode}
+                  colorScheme="blue"
+                  size="sm"
+                  onClick={() => {
+                    if (!formattedCode) return;
+                    const types = JSONtoTS(JSON.parse(formattedCode)).join(
+                      "\n"
+                    );
+                    toast({
+                      title: "Copied!",
+                      description: "TS types copied to clipboard",
+                      status: "success",
+                      colorScheme: "blue",
+                      duration: 3000,
+                      position: "top",
+                      isClosable: true,
+                    });
+                    navigator.clipboard.writeText(types);
+                  }}
+                >
+                  Copy TS Type
+                </Button>
+                <Button
+                  borderRadius={2}
+                  variant="outline"
+                  ml={1}
+                  isDisabled={!formattedCode}
+                  colorScheme="blue"
                   size="sm"
                   onClick={() => {
                     if (!formattedCodeRef.current) return;
@@ -110,7 +150,11 @@ export const Page = () => {
                   Fold All
                 </Button>
                 <Button
-                  borderRadius={0}
+                  borderRadius={2}
+                  variant="outline"
+                  ml={1}
+                  colorScheme="blue"
+                  isDisabled={!formattedCode}
                   size="sm"
                   onClick={() => {
                     if (!formattedCodeRef.current) return;
@@ -123,17 +167,19 @@ export const Page = () => {
                 </Button>
               </Box>
             </Box>
-            <Monaco ref={formattedCodeRef} value={formattedCode ?? undefined} />
+            <Monaco
+              ref={formattedCodeRef}
+              onChange={(value) => {
+                setFormattedCode(value ?? null);
+              }}
+              value={formattedCode ?? undefined}
+            />
           </Box>
         </GridItem>
-      </Grid>
-      <Box
-        px={8}
-        borderTop={1}
-        borderColor={"gray.400"}
-        borderTopStyle={"solid"}
-      >
-        <Tabs position="relative" variant="unstyled">
+      </SimpleGrid>
+      <Divider orientation="horizontal" />
+      <Box px={8}>
+        <Tabs size={"sm"} position="relative" variant="unstyled">
           <TabList>
             <Tab>
               Error
@@ -157,19 +203,17 @@ export const Page = () => {
             }}
             overflow={"auto"}
           >
-            <TabPanel>
-              {!error && (
-                <Text fontSize={"sm"} color={"green"}>
-                  No errors
-                </Text>
-              )}
+            <TabPanel px={0} py={2}>
+              {!error && <Text fontSize={"sm"}>No errors</Text>}
               {error && (
                 <Text fontSize={"sm"} color={"red"}>
                   {error}
                 </Text>
               )}
             </TabPanel>
-            <TabPanel>hmm ... what do you think we should put here</TabPanel>
+            <TabPanel px={0} py={2}>
+              TBD
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </Box>
