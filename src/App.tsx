@@ -1,4 +1,3 @@
-/// <reference types="vite-plugin-svgr/client" />
 import { ChakraProvider } from "@chakra-ui/react";
 import { Page } from ".";
 
