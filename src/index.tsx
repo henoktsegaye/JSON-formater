@@ -69,7 +69,7 @@ export const Page = () => {
               alignItems={"center"}
             >
               <Box display={"flex"} alignItems="center" flexDirection={"row"}>
-                <img src="./public/logo.svg" alt="logo" width={50} />
+                <img src="./logo.svg" alt="logo" width={50} />
               </Box>
               <Box flexDirection={"row"} display={"flex"}>
                 <Select width={"140px"}>
